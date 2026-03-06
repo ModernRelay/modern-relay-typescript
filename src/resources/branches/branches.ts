@@ -1,6 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ClassesAPI from './classes';
+import {
+  ClassCreateBatchParams,
+  ClassCreateBatchResponse,
+  ClassCreateParams,
+  ClassCreateResponse,
+  ClassDeleteParams,
+  ClassDeleteResponse,
+  ClassUpdateParams,
+  Classes,
+} from './classes';
 import * as EntitiesAPI from './entities';
 import {
   Entities,
@@ -8,258 +19,245 @@ import {
   EntityCreateResponse,
   EntityDeleteParams,
   EntityDeleteResponse,
+  EntityListBackreferencesParams,
+  EntityListBackreferencesResponse,
+  EntityListBackreferencesResponsesOffsetPage,
   EntityListParams,
   EntityListResponse,
-  EntityUpdateMultipleParams,
-  EntityUpdateMultipleResponse,
+  EntityListResponsesOffsetPage,
+  EntityQueryParams,
+  EntityQueryResponse,
+  EntityRetrieveParams,
+  EntityRetrieveResponse,
+  EntityUpdateBatchParams,
+  EntityUpdateBatchResponse,
   EntityUpdateParams,
   EntityUpdateResponse,
 } from './entities';
 import * as PropertiesAPI from './properties';
 import {
-  Properties as PropertiesAPIProperties,
+  Properties,
+  PropertyCreateBatchParams,
+  PropertyCreateBatchResponse,
   PropertyCreateParams,
   PropertyCreateResponse,
   PropertyDeleteParams,
   PropertyDeleteResponse,
+  PropertyUpdateParams,
 } from './properties';
+import * as SchemaAPI from './schema';
+import { Schema, SchemaRetrieveResponse } from './schema';
 import { APIPromise } from '../../core/api-promise';
+import { OffsetPage, type OffsetPageParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Propose, review, and merge changes to data
+ */
 export class Branches extends APIResource {
+  schema: SchemaAPI.Schema = new SchemaAPI.Schema(this._client);
+  classes: ClassesAPI.Classes = new ClassesAPI.Classes(this._client);
   properties: PropertiesAPI.Properties = new PropertiesAPI.Properties(this._client);
   entities: EntitiesAPI.Entities = new EntitiesAPI.Entities(this._client);
 
   /**
-   * Permanently deletes a branch and all its associated facts. Cannot delete
-   * proposals with child proposals or the main proposal.
+   * Creates a new branch from the repository's main data.
    */
-  delete(
-    branchID: string,
-    body?: BranchDeleteParams | null | undefined,
+  create(repositoryID: string, body: BranchCreateParams, options?: RequestOptions): APIPromise<Branch> {
+    return this._client.post(path`/v1/repositories/${repositoryID}/branches`, { body, ...options });
+  }
+
+  /**
+   * Retrieves the details of an existing branch.
+   */
+  retrieve(branchID: string, options?: RequestOptions): APIPromise<Branch> {
+    return this._client.get(path`/v1/branches/${branchID}`, options);
+  }
+
+  /**
+   * Returns a paginated list of all branches for the specified repository.
+   */
+  list(
+    repositoryID: string,
+    query: BranchListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<BranchDeleteResponse> {
-    return this._client.delete(path`/v1/branches/${branchID}`, { body, ...options });
+  ): PagePromise<BranchesOffsetPage, Branch> {
+    return this._client.getAPIList(path`/v1/repositories/${repositoryID}/branches`, OffsetPage<Branch>, {
+      query,
+      ...options,
+    });
   }
 
   /**
-   * Creates a new class in the schema.
+   * Permanently deletes a branch and all its associated facts. Cannot delete
+   * branches with children or the main branch.
    */
-  createClass(branchID: string, body: BranchCreateClassParams, options?: RequestOptions): APIPromise<string> {
-    return this._client.post(path`/v1/branches/${branchID}/classes`, { body, ...options });
+  delete(branchID: string, options?: RequestOptions): APIPromise<BranchDeleteResponse> {
+    return this._client.delete(path`/v1/branches/${branchID}`, options);
   }
 
   /**
-   * Returns a list of Branches that are direct children of the specified proposal.
+   * Returns the set of entity changes on this branch compared to its parent. Shows
+   * added and removed property values per entity.
+   */
+  diff(branchID: string, options?: RequestOptions): APIPromise<BranchDiffResponse> {
+    return this._client.get(path`/v1/branches/${branchID}/diff`, options);
+  }
+
+  /**
+   * Returns a list of branches that are direct children of the specified branch.
    */
   listChildren(
     branchID: string,
     query: BranchListChildrenParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<BranchListChildrenResponse> {
-    return this._client.get(path`/v1/branches/${branchID}/children`, { query, ...options });
+  ): PagePromise<BranchesOffsetPage, Branch> {
+    return this._client.getAPIList(path`/v1/branches/${branchID}/children`, OffsetPage<Branch>, {
+      query,
+      ...options,
+    });
   }
 
   /**
-   * Retrieves the complete schema definition for a branch, including all classes and
-   * properties.
+   * Merges all changes from the source branch into the target branch. The source
+   * branch ID comes from the URL path; the target branch ID must be provided in the
+   * request body.
    */
-  retrieveSchema(branchID: string, options?: RequestOptions): APIPromise<BranchRetrieveSchemaResponse> {
-    return this._client.get(path`/v1/branches/${branchID}/schema`, options);
+  merge(sourceBranchID: string, body: BranchMergeParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/v1/branches/${sourceBranchID}/merge`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
+}
+
+export type BranchesOffsetPage = OffsetPage<Branch>;
+
+export interface Branch {
+  id: string;
+
+  base_branch_id: string | null;
+
+  created_at: string;
+
+  created_by: string | null;
+
+  is_main: boolean;
+
+  name: string;
+
+  repository_id: string;
+
+  updated_at: string;
+
+  updated_by: string | null;
 }
 
 export type BranchDeleteResponse = boolean;
 
-export type BranchCreateClassResponse = string;
+export type BranchDiffResponse = { [key: string]: BranchDiffResponse.item };
 
-export interface BranchListChildrenResponse {
-  data: Array<BranchListChildrenResponse.Data>;
+export namespace BranchDiffResponse {
+  export interface item {
+    added: {
+      [key: string]: Array<
+        | string
+        | number
+        | boolean
+        | (string & {})
+        | Array<string | number | boolean | (string & {})>
+        | { [key: string]: unknown }
+      >;
+    };
 
-  has_more: boolean;
-}
-
-export namespace BranchListChildrenResponse {
-  export interface Data {
-    id: string;
-
-    base_branch_id: string | null;
-
-    created_at: string;
-
-    created_by: string | null;
-
-    is_main: boolean;
-
-    name: string;
-
-    repository_id: string;
-
-    updated_at: string;
-
-    updated_by: string | null;
+    removed: {
+      [key: string]: Array<
+        | string
+        | number
+        | boolean
+        | (string & {})
+        | Array<string | number | boolean | (string & {})>
+        | { [key: string]: unknown }
+      >;
+    };
   }
 }
 
-export interface BranchRetrieveSchemaResponse {
-  classIds: { [key: string]: string };
-
-  classIdToApiName: { [key: string]: string };
-
-  classIdToPluralName: { [key: string]: string };
-
-  classIdToSingularName: { [key: string]: string };
-
-  propertyIds: { [key: string]: string };
-
-  propertyIdToApiName: { [key: string]: string };
-
-  schema: BranchRetrieveSchemaResponse.Schema;
-
-  queryDsl?: BranchRetrieveSchemaResponse.QueryDsl;
+export interface BranchCreateParams {
+  name: string;
 }
 
-export namespace BranchRetrieveSchemaResponse {
-  export interface Schema {
-    classes: { [key: string]: Schema.Classes };
+export interface BranchListParams extends OffsetPageParams {}
 
-    properties: { [key: string]: Schema.Properties };
-  }
+export interface BranchListChildrenParams extends OffsetPageParams {}
 
-  export namespace Schema {
-    export interface Classes {
-      apiName: string;
-
-      pluralName: string;
-
-      singularName: string;
-
-      description?: string;
-
-      /**
-       * Marks system-managed classes that cannot be deleted by users
-       */
-      isSystem?: boolean;
-    }
-
-    export interface Properties {
-      apiName: string;
-
-      /**
-       * Which classes this property belongs to
-       */
-      domain: Array<string>;
-
-      /**
-       * The human readable display name of the property (Capitalize the first letter)
-       * (e.g. 'Last Name', 'Email', 'Age', etc.)
-       */
-      name: string;
-
-      range: 'string' | 'number' | 'boolean' | 'datetime' | 'reference';
-
-      default?: unknown;
-
-      /**
-       * Provide a description for the property if it's not obvious from the name.
-       */
-      description?: string | null;
-
-      displayName?: boolean;
-
-      multiValued?: boolean;
-
-      /**
-       * Which classes this property references
-       */
-      referenceClasses?: Array<string>;
-
-      required?: boolean;
-
-      targetBranchId?: string;
-
-      unique?: boolean;
-    }
-  }
-
-  export interface QueryDsl {
-    filterOperators: Array<string>;
-
-    logicalOperators: Array<string>;
-
-    rankCombinators: Array<string>;
-
-    rankTypes: Array<string>;
-
-    relationalOperators: Array<string>;
-
-    sortDirections: Array<string>;
-  }
+export interface BranchMergeParams {
+  targetBranchId: string;
 }
 
-export interface BranchDeleteParams {}
-
-export interface BranchCreateClassParams {
-  classInfo: BranchCreateClassParams.ClassInfo;
-}
-
-export namespace BranchCreateClassParams {
-  export interface ClassInfo {
-    apiName: string;
-
-    pluralName: string;
-
-    singularName: string;
-
-    description?: string;
-
-    /**
-     * Marks system-managed classes that cannot be deleted by users
-     */
-    isSystem?: boolean;
-  }
-}
-
-export interface BranchListChildrenParams {
-  limit?: number;
-
-  offset?: number;
-}
-
-Branches.Properties = PropertiesAPIProperties;
+Branches.Schema = Schema;
+Branches.Classes = Classes;
+Branches.Properties = Properties;
 Branches.Entities = Entities;
 
 export declare namespace Branches {
   export {
+    type Branch as Branch,
     type BranchDeleteResponse as BranchDeleteResponse,
-    type BranchCreateClassResponse as BranchCreateClassResponse,
-    type BranchListChildrenResponse as BranchListChildrenResponse,
-    type BranchRetrieveSchemaResponse as BranchRetrieveSchemaResponse,
-    type BranchDeleteParams as BranchDeleteParams,
-    type BranchCreateClassParams as BranchCreateClassParams,
+    type BranchDiffResponse as BranchDiffResponse,
+    type BranchesOffsetPage as BranchesOffsetPage,
+    type BranchCreateParams as BranchCreateParams,
+    type BranchListParams as BranchListParams,
     type BranchListChildrenParams as BranchListChildrenParams,
+    type BranchMergeParams as BranchMergeParams,
+  };
+
+  export { Schema as Schema, type SchemaRetrieveResponse as SchemaRetrieveResponse };
+
+  export {
+    Classes as Classes,
+    type ClassCreateResponse as ClassCreateResponse,
+    type ClassDeleteResponse as ClassDeleteResponse,
+    type ClassCreateBatchResponse as ClassCreateBatchResponse,
+    type ClassCreateParams as ClassCreateParams,
+    type ClassUpdateParams as ClassUpdateParams,
+    type ClassDeleteParams as ClassDeleteParams,
+    type ClassCreateBatchParams as ClassCreateBatchParams,
   };
 
   export {
-    PropertiesAPIProperties as Properties,
+    Properties as Properties,
     type PropertyCreateResponse as PropertyCreateResponse,
     type PropertyDeleteResponse as PropertyDeleteResponse,
+    type PropertyCreateBatchResponse as PropertyCreateBatchResponse,
     type PropertyCreateParams as PropertyCreateParams,
+    type PropertyUpdateParams as PropertyUpdateParams,
     type PropertyDeleteParams as PropertyDeleteParams,
+    type PropertyCreateBatchParams as PropertyCreateBatchParams,
   };
 
   export {
     Entities as Entities,
     type EntityCreateResponse as EntityCreateResponse,
+    type EntityRetrieveResponse as EntityRetrieveResponse,
     type EntityUpdateResponse as EntityUpdateResponse,
     type EntityListResponse as EntityListResponse,
     type EntityDeleteResponse as EntityDeleteResponse,
-    type EntityUpdateMultipleResponse as EntityUpdateMultipleResponse,
+    type EntityListBackreferencesResponse as EntityListBackreferencesResponse,
+    type EntityQueryResponse as EntityQueryResponse,
+    type EntityUpdateBatchResponse as EntityUpdateBatchResponse,
+    type EntityListResponsesOffsetPage as EntityListResponsesOffsetPage,
+    type EntityListBackreferencesResponsesOffsetPage as EntityListBackreferencesResponsesOffsetPage,
     type EntityCreateParams as EntityCreateParams,
+    type EntityRetrieveParams as EntityRetrieveParams,
     type EntityUpdateParams as EntityUpdateParams,
     type EntityListParams as EntityListParams,
     type EntityDeleteParams as EntityDeleteParams,
-    type EntityUpdateMultipleParams as EntityUpdateMultipleParams,
+    type EntityListBackreferencesParams as EntityListBackreferencesParams,
+    type EntityQueryParams as EntityQueryParams,
+    type EntityUpdateBatchParams as EntityUpdateBatchParams,
   };
 }

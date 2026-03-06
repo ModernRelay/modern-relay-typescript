@@ -14,37 +14,54 @@ import * as Opts from './internal/request-options';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type OffsetPageParams, OffsetPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
-  AccountListRepositoriesParams,
-  AccountListRepositoriesResponse,
-  Accounts,
-} from './resources/accounts';
-import {
   Repositories,
-  RepositoryCreateBranchParams,
-  RepositoryCreateBranchResponse,
+  Repository,
   RepositoryCreateParams,
   RepositoryCreateResponse,
-  RepositoryDeleteParams,
   RepositoryDeleteResponse,
-  RepositoryRetrieveResponse,
+  RepositoryListParams,
+  RepositoryListResponse,
+  RepositoryListResponsesOffsetPage,
   RepositoryUpdateParams,
   RepositoryUpdateResponse,
 } from './resources/repositories';
-import { Search, SearchPerformParams, SearchPerformResponse } from './resources/search';
 import {
-  BranchCreateClassParams,
-  BranchCreateClassResponse,
-  BranchDeleteParams,
+  Search,
+  SearchEntitiesParams,
+  SearchEntitiesResponse,
+  SearchRepositoriesParams,
+  SearchRepositoriesResponse,
+  SearchRepositoriesResponsesOffsetPage,
+} from './resources/search';
+import {
+  Branch,
+  BranchCreateParams,
   BranchDeleteResponse,
+  BranchDiffResponse,
   BranchListChildrenParams,
-  BranchListChildrenResponse,
-  BranchRetrieveSchemaResponse,
+  BranchListParams,
+  BranchMergeParams,
   Branches,
+  BranchesOffsetPage,
 } from './resources/branches/branches';
+import {
+  Proposal,
+  ProposalAcceptParams,
+  ProposalAcceptResponse,
+  ProposalCreateResponse,
+  ProposalListParams,
+  ProposalListResponse,
+  ProposalListResponsesOffsetPage,
+  ProposalUpdateParams,
+  ProposalUpdateResponse,
+  Proposals,
+} from './resources/proposals/proposals';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -60,9 +77,9 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * API requests are authenticated using Bearer tokens. Provide your session token in the Authorization header.
+   * Defaults to process.env['MODERN_RELAY_API_KEY'].
    */
-  apiKey?: string | undefined;
+  apiKey?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -137,7 +154,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Modern Relay API.
  */
 export class ModernRelay {
-  apiKey: string;
+  apiKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -154,8 +171,8 @@ export class ModernRelay {
   /**
    * API Client for interfacing with the Modern Relay API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['MODERN_RELAY_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['MODERN_RELAY_BASE_URL'] ?? https://api.example.com] - Override the default base URL for the API.
+   * @param {string | null | undefined} [opts.apiKey=process.env['MODERN_RELAY_API_KEY'] ?? null]
+   * @param {string} [opts.baseURL=process.env['MODERN_RELAY_BASE_URL'] ?? https://modernrelay.com/api] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -165,19 +182,13 @@ export class ModernRelay {
    */
   constructor({
     baseURL = readEnv('MODERN_RELAY_BASE_URL'),
-    apiKey = readEnv('MODERN_RELAY_API_KEY'),
+    apiKey = readEnv('MODERN_RELAY_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (apiKey === undefined) {
-      throw new Errors.ModernRelayError(
-        "The MODERN_RELAY_API_KEY environment variable is missing or empty; either provide it, or instantiate the ModernRelay client with an apiKey option, like new ModernRelay({ apiKey: 'My API Key' }).",
-      );
-    }
-
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.example.com`,
+      baseURL: baseURL || `https://modernrelay.com/api`,
     };
 
     this.baseURL = options.baseURL!;
@@ -223,7 +234,7 @@ export class ModernRelay {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.example.com';
+    return this.baseURL !== 'https://modernrelay.com/api';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -231,10 +242,22 @@ export class ModernRelay {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.apiKey == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -494,6 +517,30 @@ export class ModernRelay {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as ModernRelay, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -741,59 +788,79 @@ export class ModernRelay {
 
   static toFile = Uploads.toFile;
 
-  repositories: API.Repositories = new API.Repositories(this);
   /**
    * Create and manage data repositories
    */
-  accounts: API.Accounts = new API.Accounts(this);
+  repositories: API.Repositories = new API.Repositories(this);
+  /**
+   * Propose, review, and merge changes to data
+   */
   branches: API.Branches = new API.Branches(this);
   /**
-   * Create, query, and search your data
+   * Review workflows for collaborative data contributions. Proposals isolate changes on branches for human review before merging.
+   */
+  proposals: API.Proposals = new API.Proposals(this);
+  /**
+   * Search entities across repositories
    */
   search: API.Search = new API.Search(this);
 }
 
 ModernRelay.Repositories = Repositories;
-ModernRelay.Accounts = Accounts;
 ModernRelay.Branches = Branches;
+ModernRelay.Proposals = Proposals;
 ModernRelay.Search = Search;
 
 export declare namespace ModernRelay {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Repositories as Repositories,
-    type RepositoryCreateResponse as RepositoryCreateResponse,
-    type RepositoryRetrieveResponse as RepositoryRetrieveResponse,
-    type RepositoryUpdateResponse as RepositoryUpdateResponse,
-    type RepositoryDeleteResponse as RepositoryDeleteResponse,
-    type RepositoryCreateBranchResponse as RepositoryCreateBranchResponse,
-    type RepositoryCreateParams as RepositoryCreateParams,
-    type RepositoryUpdateParams as RepositoryUpdateParams,
-    type RepositoryDeleteParams as RepositoryDeleteParams,
-    type RepositoryCreateBranchParams as RepositoryCreateBranchParams,
-  };
+  export import OffsetPage = Pagination.OffsetPage;
+  export { type OffsetPageParams as OffsetPageParams, type OffsetPageResponse as OffsetPageResponse };
 
   export {
-    Accounts as Accounts,
-    type AccountListRepositoriesResponse as AccountListRepositoriesResponse,
-    type AccountListRepositoriesParams as AccountListRepositoriesParams,
+    Repositories as Repositories,
+    type Repository as Repository,
+    type RepositoryCreateResponse as RepositoryCreateResponse,
+    type RepositoryUpdateResponse as RepositoryUpdateResponse,
+    type RepositoryListResponse as RepositoryListResponse,
+    type RepositoryDeleteResponse as RepositoryDeleteResponse,
+    type RepositoryListResponsesOffsetPage as RepositoryListResponsesOffsetPage,
+    type RepositoryCreateParams as RepositoryCreateParams,
+    type RepositoryUpdateParams as RepositoryUpdateParams,
+    type RepositoryListParams as RepositoryListParams,
   };
 
   export {
     Branches as Branches,
+    type Branch as Branch,
     type BranchDeleteResponse as BranchDeleteResponse,
-    type BranchCreateClassResponse as BranchCreateClassResponse,
-    type BranchListChildrenResponse as BranchListChildrenResponse,
-    type BranchRetrieveSchemaResponse as BranchRetrieveSchemaResponse,
-    type BranchDeleteParams as BranchDeleteParams,
-    type BranchCreateClassParams as BranchCreateClassParams,
+    type BranchDiffResponse as BranchDiffResponse,
+    type BranchesOffsetPage as BranchesOffsetPage,
+    type BranchCreateParams as BranchCreateParams,
+    type BranchListParams as BranchListParams,
     type BranchListChildrenParams as BranchListChildrenParams,
+    type BranchMergeParams as BranchMergeParams,
+  };
+
+  export {
+    Proposals as Proposals,
+    type Proposal as Proposal,
+    type ProposalCreateResponse as ProposalCreateResponse,
+    type ProposalUpdateResponse as ProposalUpdateResponse,
+    type ProposalListResponse as ProposalListResponse,
+    type ProposalAcceptResponse as ProposalAcceptResponse,
+    type ProposalListResponsesOffsetPage as ProposalListResponsesOffsetPage,
+    type ProposalUpdateParams as ProposalUpdateParams,
+    type ProposalListParams as ProposalListParams,
+    type ProposalAcceptParams as ProposalAcceptParams,
   };
 
   export {
     Search as Search,
-    type SearchPerformResponse as SearchPerformResponse,
-    type SearchPerformParams as SearchPerformParams,
+    type SearchEntitiesResponse as SearchEntitiesResponse,
+    type SearchRepositoriesResponse as SearchRepositoriesResponse,
+    type SearchRepositoriesResponsesOffsetPage as SearchRepositoriesResponsesOffsetPage,
+    type SearchEntitiesParams as SearchEntitiesParams,
+    type SearchRepositoriesParams as SearchRepositoriesParams,
   };
 }

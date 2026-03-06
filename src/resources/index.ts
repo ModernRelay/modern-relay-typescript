@@ -1,30 +1,45 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
-  Accounts,
-  type AccountListRepositoriesResponse,
-  type AccountListRepositoriesParams,
-} from './accounts';
-export {
   Branches,
+  type Branch,
   type BranchDeleteResponse,
-  type BranchCreateClassResponse,
-  type BranchListChildrenResponse,
-  type BranchRetrieveSchemaResponse,
-  type BranchDeleteParams,
-  type BranchCreateClassParams,
+  type BranchDiffResponse,
+  type BranchCreateParams,
+  type BranchListParams,
   type BranchListChildrenParams,
+  type BranchMergeParams,
+  type BranchesOffsetPage,
 } from './branches/branches';
 export {
+  Proposals,
+  type Proposal,
+  type ProposalCreateResponse,
+  type ProposalUpdateResponse,
+  type ProposalListResponse,
+  type ProposalAcceptResponse,
+  type ProposalUpdateParams,
+  type ProposalListParams,
+  type ProposalAcceptParams,
+  type ProposalListResponsesOffsetPage,
+} from './proposals/proposals';
+export {
   Repositories,
+  type Repository,
   type RepositoryCreateResponse,
-  type RepositoryRetrieveResponse,
   type RepositoryUpdateResponse,
+  type RepositoryListResponse,
   type RepositoryDeleteResponse,
-  type RepositoryCreateBranchResponse,
   type RepositoryCreateParams,
   type RepositoryUpdateParams,
-  type RepositoryDeleteParams,
-  type RepositoryCreateBranchParams,
+  type RepositoryListParams,
+  type RepositoryListResponsesOffsetPage,
 } from './repositories';
-export { Search, type SearchPerformResponse, type SearchPerformParams } from './search';
+export {
+  Search,
+  type SearchEntitiesResponse,
+  type SearchRepositoriesResponse,
+  type SearchEntitiesParams,
+  type SearchRepositoriesParams,
+  type SearchRepositoriesResponsesOffsetPage,
+} from './search';

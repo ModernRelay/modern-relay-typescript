@@ -8,8 +8,7 @@ const client = new ModernRelay({
 });
 
 describe('resource properties', () => {
-  // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
+  test('create: only required params', async () => {
     const responsePromise = client.branches.properties.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       property: {
         apiName: 'apiName',
@@ -27,8 +26,7 @@ describe('resource properties', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
+  test('create: required and optional params', async () => {
     const response = await client.branches.properties.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       property: {
         apiName: 'apiName',
@@ -47,8 +45,33 @@ describe('resource properties', () => {
     });
   });
 
-  // Mock server tests are disabled
-  test.skip('delete: only required params', async () => {
+  test('update: only required params', async () => {
+    const responsePromise = client.branches.properties.update('ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c', {
+      branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+      updates: {},
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: required and optional params', async () => {
+    const response = await client.branches.properties.update('ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c', {
+      branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+      updates: {
+        apiName: 'apiName',
+        description: 'description',
+        displayName: true,
+        name: 'x',
+      },
+    });
+  });
+
+  test('delete: only required params', async () => {
     const responsePromise = client.branches.properties.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
@@ -61,10 +84,50 @@ describe('resource properties', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('delete: required and optional params', async () => {
+  test('delete: required and optional params', async () => {
     const response = await client.branches.properties.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  test('createBatch: only required params', async () => {
+    const responsePromise = client.branches.properties.createBatch('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      properties: [
+        {
+          apiName: 'apiName',
+          domain: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+          name: 'x',
+          range: 'string',
+        },
+      ],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('createBatch: required and optional params', async () => {
+    const response = await client.branches.properties.createBatch('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      properties: [
+        {
+          apiName: 'apiName',
+          domain: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+          name: 'x',
+          range: 'string',
+          default: {},
+          description: 'description',
+          displayName: true,
+          multiValued: true,
+          referenceClasses: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+          required: true,
+          targetBranchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          unique: true,
+        },
+      ],
     });
   });
 });
