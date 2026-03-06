@@ -1,0 +1,111 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import ModernRelay from 'modern-relay';
+
+const client = new ModernRelay({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
+
+describe('resource proposals', () => {
+  test('create', async () => {
+    const responsePromise = client.proposals.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.proposals.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: only required params', async () => {
+    const responsePromise = client.proposals.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      repositoryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: required and optional params', async () => {
+    const response = await client.proposals.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      repositoryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      description: 'description',
+      status: 'draft',
+      title: 'x',
+    });
+  });
+
+  test('list', async () => {
+    const responsePromise = client.proposals.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.proposals.list(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        {
+          limit: 1,
+          offset: 0,
+          status: ['draft'],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(ModernRelay.NotFoundError);
+  });
+
+  test('delete', async () => {
+    const responsePromise = client.proposals.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('accept: only required params', async () => {
+    const responsePromise = client.proposals.accept('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('accept: required and optional params', async () => {
+    const response = await client.proposals.accept('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+});

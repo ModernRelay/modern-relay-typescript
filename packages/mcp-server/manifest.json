@@ -1,0 +1,43 @@
+{
+  "dxt_version": "0.2",
+  "name": "modern-relay-mcp",
+  "version": "0.0.1",
+  "description": "The official MCP Server for the Modern Relay API",
+  "author": {
+    "name": "Modern Relay",
+    "email": "support@modernrelay.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stainless-sdks/modern-relay-typescript.git"
+  },
+  "homepage": "https://github.com/stainless-sdks/modern-relay-typescript/tree/main/packages/mcp-server#readme",
+  "documentation": "https://docs.modernrelay.com",
+  "server": {
+    "type": "node",
+    "entry_point": "index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/index.js"],
+      "env": {
+        "MODERN_RELAY_API_KEY": "${user_config.MODERN_RELAY_API_KEY}"
+      }
+    }
+  },
+  "user_config": {
+    "MODERN_RELAY_API_KEY": {
+      "title": "api_key",
+      "description": "",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "tools": [],
+  "tools_generated": true,
+  "compatibility": {
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "keywords": ["api"]
+}

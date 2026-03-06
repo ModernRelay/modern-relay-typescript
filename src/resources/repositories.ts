@@ -2,9 +2,13 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { OffsetPage, type OffsetPageParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Create and manage data repositories
+ */
 export class Repositories extends APIResource {
   /**
    * Creates a new repository. Returns the created repository object.
@@ -16,7 +20,7 @@ export class Repositories extends APIResource {
   /**
    * Retrieves the details of an existing repository.
    */
-  retrieve(repositoryID: string, options?: RequestOptions): APIPromise<RepositoryRetrieveResponse> {
+  retrieve(repositoryID: string, options?: RequestOptions): APIPromise<Repository> {
     return this._client.get(path`/v1/repositories/${repositoryID}`, options);
   }
 
@@ -32,37 +36,31 @@ export class Repositories extends APIResource {
   }
 
   /**
-   * Permanently deletes a repository. This action cannot be undone.
+   * Returns a list of repositories for the specified account.
    */
-  delete(
-    repositoryID: string,
-    body?: RepositoryDeleteParams | null | undefined,
+  list(
+    accountID: string,
+    query: RepositoryListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<RepositoryDeleteResponse> {
-    return this._client.delete(path`/v1/repositories/${repositoryID}`, { body, ...options });
+  ): PagePromise<RepositoryListResponsesOffsetPage, RepositoryListResponse> {
+    return this._client.getAPIList(
+      path`/v1/accounts/${accountID}/repositories`,
+      OffsetPage<RepositoryListResponse>,
+      { query, ...options },
+    );
   }
 
   /**
-   * Creates a new branch from the repository's main data.
+   * Permanently deletes a repository. This action cannot be undone.
    */
-  createBranch(
-    repositoryID: string,
-    body: RepositoryCreateBranchParams,
-    options?: RequestOptions,
-  ): APIPromise<RepositoryCreateBranchResponse> {
-    return this._client.post(path`/v1/repositories/${repositoryID}/branches`, { body, ...options });
+  delete(repositoryID: string, options?: RequestOptions): APIPromise<RepositoryDeleteResponse> {
+    return this._client.delete(path`/v1/repositories/${repositoryID}`, options);
   }
 }
 
-export interface RepositoryCreateResponse {
-  success: boolean;
+export type RepositoryListResponsesOffsetPage = OffsetPage<RepositoryListResponse>;
 
-  branchId?: string;
-
-  repositoryId?: string;
-}
-
-export interface RepositoryRetrieveResponse {
+export interface Repository {
   id: string;
 
   account_id: string;
@@ -92,6 +90,14 @@ export interface RepositoryRetrieveResponse {
   updated_by: string | null;
 }
 
+export interface RepositoryCreateResponse {
+  success: boolean;
+
+  branchId?: string;
+
+  repositoryId?: string;
+}
+
 export interface RepositoryUpdateResponse {
   id: string;
 
@@ -118,27 +124,59 @@ export interface RepositoryUpdateResponse {
   updated_by: string | null;
 }
 
-export type RepositoryDeleteResponse = boolean;
-
-export interface RepositoryCreateBranchResponse {
+export interface RepositoryListResponse {
   id: string;
 
-  base_branch_id: string | null;
+  branchCount: number;
 
-  created_at: string;
+  createdAt: string;
 
-  created_by: string | null;
+  description: string | null;
 
-  is_main: boolean;
+  filesEnabled: boolean;
+
+  isPinned: boolean | null;
+
+  isSaved: boolean | null;
+
+  mainBranchId: string | null;
 
   name: string;
 
-  repository_id: string;
+  ownerAccountId: string;
 
-  updated_at: string;
+  ownerAccountName: string | null;
 
-  updated_by: string | null;
+  ownerAccountSlug: string | null;
+
+  permissions: RepositoryListResponse.Permissions | null;
+
+  saveCount: number;
+
+  slug: string | null;
+
+  storage: 'postgres' | 'turbopuffer';
+
+  supportsFiles: boolean;
+
+  updatedAt: string | null;
+
+  voteCount: number;
 }
+
+export namespace RepositoryListResponse {
+  export interface Permissions {
+    actions: Array<
+      'view_repository' | 'edit_repository' | 'delete_repository' | 'manage_branches' | 'manage_permissions'
+    >;
+
+    canEdit: boolean;
+
+    canView: boolean;
+  }
+}
+
+export type RepositoryDeleteResponse = boolean;
 
 export interface RepositoryCreateParams {
   accountId: string;
@@ -164,22 +202,22 @@ export interface RepositoryUpdateParams {
   slug?: string;
 }
 
-export interface RepositoryDeleteParams {}
+export interface RepositoryListParams extends OffsetPageParams {
+  source?: 'all' | 'my' | 'shared' | 'saved';
 
-export interface RepositoryCreateBranchParams {
-  name: string;
+  userId?: string;
 }
 
 export declare namespace Repositories {
   export {
+    type Repository as Repository,
     type RepositoryCreateResponse as RepositoryCreateResponse,
-    type RepositoryRetrieveResponse as RepositoryRetrieveResponse,
     type RepositoryUpdateResponse as RepositoryUpdateResponse,
+    type RepositoryListResponse as RepositoryListResponse,
     type RepositoryDeleteResponse as RepositoryDeleteResponse,
-    type RepositoryCreateBranchResponse as RepositoryCreateBranchResponse,
+    type RepositoryListResponsesOffsetPage as RepositoryListResponsesOffsetPage,
     type RepositoryCreateParams as RepositoryCreateParams,
     type RepositoryUpdateParams as RepositoryUpdateParams,
-    type RepositoryDeleteParams as RepositoryDeleteParams,
-    type RepositoryCreateBranchParams as RepositoryCreateBranchParams,
+    type RepositoryListParams as RepositoryListParams,
   };
 }

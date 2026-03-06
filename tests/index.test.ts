@@ -322,13 +322,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['MODERN_RELAY_BASE_URL'] = ''; // empty
       const client = new ModernRelay({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.example.com');
+      expect(client.baseURL).toEqual('https://modernrelay.com/api');
     });
 
     test('blank env variable', () => {
       process.env['MODERN_RELAY_BASE_URL'] = '  '; // blank
       const client = new ModernRelay({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.example.com');
+      expect(client.baseURL).toEqual('https://modernrelay.com/api');
     });
 
     test('in request options', () => {

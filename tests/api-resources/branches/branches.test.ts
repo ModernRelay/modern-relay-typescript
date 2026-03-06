@@ -8,8 +8,55 @@ const client = new ModernRelay({
 });
 
 describe('resource branches', () => {
-  // Mock server tests are disabled
-  test.skip('delete', async () => {
+  test('create: only required params', async () => {
+    const responsePromise = client.branches.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { name: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.branches.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { name: 'x' });
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.branches.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list', async () => {
+    const responsePromise = client.branches.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.branches.list(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        { limit: 1, offset: 0 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(ModernRelay.NotFoundError);
+  });
+
+  test('delete', async () => {
     const responsePromise = client.branches.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,27 +67,8 @@ describe('resource branches', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('delete: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.branches.delete(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {},
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(ModernRelay.NotFoundError);
-  });
-
-  // Mock server tests are disabled
-  test.skip('createClass: only required params', async () => {
-    const responsePromise = client.branches.createClass('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      classInfo: {
-        apiName: 'apiName',
-        pluralName: 'x',
-        singularName: 'x',
-      },
-    });
+  test('diff', async () => {
+    const responsePromise = client.branches.diff('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -50,21 +78,7 @@ describe('resource branches', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('createClass: required and optional params', async () => {
-    const response = await client.branches.createClass('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      classInfo: {
-        apiName: 'apiName',
-        pluralName: 'x',
-        singularName: 'x',
-        description: 'description',
-        isSystem: true,
-      },
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('listChildren', async () => {
+  test('listChildren', async () => {
     const responsePromise = client.branches.listChildren('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -75,8 +89,7 @@ describe('resource branches', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('listChildren: request options and params are passed correctly', async () => {
+  test('listChildren: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.branches.listChildren(
@@ -87,9 +100,10 @@ describe('resource branches', () => {
     ).rejects.toThrow(ModernRelay.NotFoundError);
   });
 
-  // Mock server tests are disabled
-  test.skip('retrieveSchema', async () => {
-    const responsePromise = client.branches.retrieveSchema('ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c');
+  test('merge: only required params', async () => {
+    const responsePromise = client.branches.merge('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      targetBranchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,5 +111,11 @@ describe('resource branches', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('merge: required and optional params', async () => {
+    const response = await client.branches.merge('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      targetBranchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
   });
 });
