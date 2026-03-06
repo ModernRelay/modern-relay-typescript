@@ -43,6 +43,7 @@ import {
   Branch,
   BranchCreateParams,
   BranchDeleteResponse,
+  BranchDiffParams,
   BranchDiffResponse,
   BranchListChildrenParams,
   BranchListParams,
@@ -838,6 +839,7 @@ export declare namespace ModernRelay {
     type BranchesOffsetPage as BranchesOffsetPage,
     type BranchCreateParams as BranchCreateParams,
     type BranchListParams as BranchListParams,
+    type BranchDiffParams as BranchDiffParams,
     type BranchListChildrenParams as BranchListChildrenParams,
     type BranchMergeParams as BranchMergeParams,
   };

@@ -102,8 +102,12 @@ export class Branches extends APIResource {
    * Returns the set of entity changes on this branch compared to its parent. Shows
    * added and removed property values per entity.
    */
-  diff(branchID: string, options?: RequestOptions): APIPromise<BranchDiffResponse> {
-    return this._client.get(path`/v1/branches/${branchID}/diff`, options);
+  diff(
+    branchID: string,
+    query: BranchDiffParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<BranchDiffResponse> {
+    return this._client.get(path`/v1/branches/${branchID}/diff`, { query, ...options });
   }
 
   /**
@@ -192,6 +196,10 @@ export interface BranchCreateParams {
 
 export interface BranchListParams extends OffsetPageParams {}
 
+export interface BranchDiffParams {
+  classId?: string;
+}
+
 export interface BranchListChildrenParams extends OffsetPageParams {}
 
 export interface BranchMergeParams {
@@ -211,6 +219,7 @@ export declare namespace Branches {
     type BranchesOffsetPage as BranchesOffsetPage,
     type BranchCreateParams as BranchCreateParams,
     type BranchListParams as BranchListParams,
+    type BranchDiffParams as BranchDiffParams,
     type BranchListChildrenParams as BranchListChildrenParams,
     type BranchMergeParams as BranchMergeParams,
   };

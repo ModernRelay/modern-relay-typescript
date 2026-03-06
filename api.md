@@ -30,7 +30,7 @@ Methods:
 - <code title="get /v1/branches/{branchId}">client.branches.<a href="./src/resources/branches/branches.ts">retrieve</a>(branchID) -> Branch</code>
 - <code title="get /v1/repositories/{repositoryId}/branches">client.branches.<a href="./src/resources/branches/branches.ts">list</a>(repositoryID, { ...params }) -> BranchesOffsetPage</code>
 - <code title="delete /v1/branches/{branchId}">client.branches.<a href="./src/resources/branches/branches.ts">delete</a>(branchID) -> BranchDeleteResponse</code>
-- <code title="get /v1/branches/{branchId}/diff">client.branches.<a href="./src/resources/branches/branches.ts">diff</a>(branchID) -> BranchDiffResponse</code>
+- <code title="get /v1/branches/{branchId}/diff">client.branches.<a href="./src/resources/branches/branches.ts">diff</a>(branchID, { ...params }) -> BranchDiffResponse</code>
 - <code title="get /v1/branches/{branchId}/children">client.branches.<a href="./src/resources/branches/branches.ts">listChildren</a>(branchID, { ...params }) -> BranchesOffsetPage</code>
 - <code title="post /v1/branches/{sourceBranchId}/merge">client.branches.<a href="./src/resources/branches/branches.ts">merge</a>(sourceBranchID, { ...params }) -> void</code>
 
