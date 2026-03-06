@@ -7,6 +7,7 @@ export {
   type BranchDiffResponse,
   type BranchCreateParams,
   type BranchListParams,
+  type BranchDiffParams,
   type BranchListChildrenParams,
   type BranchMergeParams,
   type BranchesOffsetPage,

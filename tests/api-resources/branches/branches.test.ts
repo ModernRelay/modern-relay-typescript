@@ -68,7 +68,7 @@ describe('resource branches', () => {
   });
 
   test('diff', async () => {
-    const responsePromise = client.branches.diff('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.branches.diff('ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -76,6 +76,17 @@ describe('resource branches', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('diff: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.branches.diff(
+        'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+        { classId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(ModernRelay.NotFoundError);
   });
 
   test('listChildren', async () => {
