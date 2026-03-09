@@ -1,12 +1,12 @@
 {
   "name": "modern-relay",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The official TypeScript library for the Modern Relay API",
   "author": "Modern Relay <support@modernrelay.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:stainless-sdks/modern-relay-typescript",
+  "repository": "github:ModernRelay/modern-relay-typescript",
   "license": "Apache-2.0",
   "packageManager": "yarn@1.22.22",
   "files": [

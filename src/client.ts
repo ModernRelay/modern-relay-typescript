@@ -43,6 +43,7 @@ import {
   Branch,
   BranchCreateParams,
   BranchDeleteResponse,
+  BranchDiffParams,
   BranchDiffResponse,
   BranchListChildrenParams,
   BranchListParams,
@@ -294,8 +295,9 @@ export class ModernRelay {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
@@ -838,6 +840,7 @@ export declare namespace ModernRelay {
     type BranchesOffsetPage as BranchesOffsetPage,
     type BranchCreateParams as BranchCreateParams,
     type BranchListParams as BranchListParams,
+    type BranchDiffParams as BranchDiffParams,
     type BranchListChildrenParams as BranchListChildrenParams,
     type BranchMergeParams as BranchMergeParams,
   };
