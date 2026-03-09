@@ -9,7 +9,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:ModernRelay/modern-relay-typescript.git
+git clone git@github.com:stainless-sdks/modern-relay-typescript.git
 cd modern-relay-typescript
 ./scripts/bootstrap
 ./scripts/build

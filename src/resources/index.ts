@@ -19,6 +19,7 @@ export {
   type ProposalUpdateResponse,
   type ProposalListResponse,
   type ProposalAcceptResponse,
+  type ProposalCreateParams,
   type ProposalUpdateParams,
   type ProposalListParams,
   type ProposalAcceptParams,

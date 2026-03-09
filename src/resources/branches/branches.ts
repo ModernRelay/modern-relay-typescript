@@ -192,6 +192,8 @@ export namespace BranchDiffResponse {
 
 export interface BranchCreateParams {
   name: string;
+
+  isGuest?: boolean;
 }
 
 export interface BranchListParams extends OffsetPageParams {}
