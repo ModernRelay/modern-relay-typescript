@@ -110,12 +110,19 @@ Types:
 
 Methods:
 
-- <code title="post /v1/repositories/{repositoryId}/proposals">client.proposals.<a href="./src/resources/proposals/proposals.ts">create</a>(repositoryID) -> ProposalCreateResponse</code>
+- <code title="post /v1/proposals">client.proposals.<a href="./src/resources/proposals/proposals.ts">create</a>({ ...params }) -> ProposalCreateResponse</code>
 - <code title="get /v1/proposals/{proposalId}">client.proposals.<a href="./src/resources/proposals/proposals.ts">retrieve</a>(proposalID) -> Proposal</code>
 - <code title="patch /v1/proposals/{proposalId}">client.proposals.<a href="./src/resources/proposals/proposals.ts">update</a>(proposalID, { ...params }) -> ProposalUpdateResponse</code>
 - <code title="get /v1/repositories/{repositoryId}/proposals">client.proposals.<a href="./src/resources/proposals/proposals.ts">list</a>(repositoryID, { ...params }) -> ProposalListResponsesOffsetPage</code>
 - <code title="delete /v1/proposals/{proposalId}">client.proposals.<a href="./src/resources/proposals/proposals.ts">delete</a>(proposalID) -> void</code>
 - <code title="post /v1/proposals/{proposalId}/accept">client.proposals.<a href="./src/resources/proposals/proposals.ts">accept</a>(proposalID, { ...params }) -> ProposalAcceptResponse</code>
+
+## Branches
+
+Methods:
+
+- <code title="post /v1/proposals/{proposalId}/branches">client.proposals.branches.<a href="./src/resources/proposals/branches.ts">link</a>(proposalID, { ...params }) -> void</code>
+- <code title="delete /v1/proposals/{proposalId}/branches/{branchId}">client.proposals.branches.<a href="./src/resources/proposals/branches.ts">unlink</a>(branchID, { ...params }) -> void</code>
 
 ## MergeEvents
 

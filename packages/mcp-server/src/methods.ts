@@ -188,7 +188,7 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.proposals.create',
     fullyQualifiedName: 'proposals.create',
     httpMethod: 'post',
-    httpPath: '/v1/repositories/{repositoryId}/proposals',
+    httpPath: '/v1/proposals',
   },
   {
     clientCallName: 'client.proposals.retrieve',
@@ -219,6 +219,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'proposals.accept',
     httpMethod: 'post',
     httpPath: '/v1/proposals/{proposalId}/accept',
+  },
+  {
+    clientCallName: 'client.proposals.branches.link',
+    fullyQualifiedName: 'proposals.branches.link',
+    httpMethod: 'post',
+    httpPath: '/v1/proposals/{proposalId}/branches',
+  },
+  {
+    clientCallName: 'client.proposals.branches.unlink',
+    fullyQualifiedName: 'proposals.branches.unlink',
+    httpMethod: 'delete',
+    httpPath: '/v1/proposals/{proposalId}/branches/{branchId}',
   },
   {
     clientCallName: 'client.proposals.mergeEvents.list',
