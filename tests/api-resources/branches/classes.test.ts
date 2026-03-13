@@ -32,7 +32,9 @@ describe('resource classes', () => {
         pluralName: 'x',
         singularName: 'x',
         description: 'description',
+        ftsEnabled: true,
         isSystem: true,
+        vectorSearchEnabled: true,
       },
     });
   });
@@ -109,7 +111,9 @@ describe('resource classes', () => {
           pluralName: 'x',
           singularName: 'x',
           description: 'description',
+          ftsEnabled: true,
           isSystem: true,
+          vectorSearchEnabled: true,
         },
       ],
     });

@@ -78,9 +78,19 @@ export namespace ClassCreateParams {
     description?: string;
 
     /**
+     * Per-class FTS flag. null/undefined = use storage backend default
+     */
+    ftsEnabled?: boolean | null;
+
+    /**
      * Marks system-managed classes that cannot be deleted by users
      */
     isSystem?: boolean;
+
+    /**
+     * Per-class vector search flag. null/undefined = use storage backend default
+     */
+    vectorSearchEnabled?: boolean | null;
   }
 }
 
@@ -133,9 +143,19 @@ export namespace ClassCreateBatchParams {
     description?: string;
 
     /**
+     * Per-class FTS flag. null/undefined = use storage backend default
+     */
+    ftsEnabled?: boolean | null;
+
+    /**
      * Marks system-managed classes that cannot be deleted by users
      */
     isSystem?: boolean;
+
+    /**
+     * Per-class vector search flag. null/undefined = use storage backend default
+     */
+    vectorSearchEnabled?: boolean | null;
   }
 }
 
