@@ -113,7 +113,7 @@ describe('resource entities', () => {
   test('listBackreferences: only required params', async () => {
     const responsePromise = client.branches.entities.listBackreferences(
       'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
-      { branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c', classId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c' },
+      { branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c' },
     );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
