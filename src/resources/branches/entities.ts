@@ -270,7 +270,7 @@ export interface EntityListBackreferencesParams extends OffsetPageParams {
   /**
    * Query param
    */
-  classId: string;
+  classId?: string;
 
   /**
    * Query param
