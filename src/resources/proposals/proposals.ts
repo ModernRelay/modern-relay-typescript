@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as BranchesAPI from './branches';
+import { BranchLinkParams, BranchUnlinkParams, Branches } from './branches';
 import * as MergeEventsAPI from './merge-events';
 import {
   MergeEventListParams,
@@ -18,14 +20,15 @@ import { path } from '../../internal/utils/path';
  * Review workflows for collaborative data contributions. Proposals isolate changes on branches for human review before merging.
  */
 export class Proposals extends APIResource {
+  branches: BranchesAPI.Branches = new BranchesAPI.Branches(this._client);
   mergeEvents: MergeEventsAPI.MergeEvents = new MergeEventsAPI.MergeEvents(this._client);
 
   /**
-   * Creates a new proposal with its own isolated branch. Returns the proposal ID and
-   * branch ID for data operations.
+   * Creates a new proposal from existing branches. Accepts an array of branch IDs
+   * (one per repository). Returns the proposal ID.
    */
-  create(repositoryID: string, options?: RequestOptions): APIPromise<ProposalCreateResponse> {
-    return this._client.post(path`/v1/repositories/${repositoryID}/proposals`, options);
+  create(body: ProposalCreateParams, options?: RequestOptions): APIPromise<ProposalCreateResponse> {
+    return this._client.post('/v1/proposals', { body, ...options });
   }
 
   /**
@@ -131,8 +134,6 @@ export namespace Proposal {
 }
 
 export interface ProposalCreateResponse {
-  branchId: string;
-
   proposalId: string;
 }
 
@@ -181,6 +182,8 @@ export interface ProposalListResponse {
 
   title: string | null;
 
+  totalBranchCount: number;
+
   updatedAt: string;
 }
 
@@ -188,6 +191,10 @@ export interface ProposalAcceptResponse {
   mergeEventId: string;
 
   success: boolean;
+}
+
+export interface ProposalCreateParams {
+  branchIds: Array<string>;
 }
 
 export interface ProposalUpdateParams {
@@ -210,6 +217,7 @@ export interface ProposalAcceptParams {
   branchId: string;
 }
 
+Proposals.Branches = Branches;
 Proposals.MergeEvents = MergeEvents;
 
 export declare namespace Proposals {
@@ -220,9 +228,16 @@ export declare namespace Proposals {
     type ProposalListResponse as ProposalListResponse,
     type ProposalAcceptResponse as ProposalAcceptResponse,
     type ProposalListResponsesOffsetPage as ProposalListResponsesOffsetPage,
+    type ProposalCreateParams as ProposalCreateParams,
     type ProposalUpdateParams as ProposalUpdateParams,
     type ProposalListParams as ProposalListParams,
     type ProposalAcceptParams as ProposalAcceptParams,
+  };
+
+  export {
+    Branches as Branches,
+    type BranchLinkParams as BranchLinkParams,
+    type BranchUnlinkParams as BranchUnlinkParams,
   };
 
   export {

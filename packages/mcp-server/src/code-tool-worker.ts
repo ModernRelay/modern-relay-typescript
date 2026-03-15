@@ -139,6 +139,8 @@ const fuse = new Fuse(
     'client.proposals.list',
     'client.proposals.retrieve',
     'client.proposals.update',
+    'client.proposals.branches.link',
+    'client.proposals.branches.unlink',
     'client.proposals.mergeEvents.list',
     'client.search.entities',
     'client.search.repositories',
