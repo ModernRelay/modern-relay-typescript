@@ -20,11 +20,8 @@ Use the Modern Relay MCP Server to enable AI assistants to interact with this AP
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:ModernRelay/modern-relay-typescript.git
+npm install modern-relay
 ```
-
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install modern-relay`
 
 ## Usage
 
