@@ -107,13 +107,13 @@ export namespace SearchRepositoriesResponse {
 }
 
 export interface SearchEntitiesParams {
-  accountId: string;
+  branchIds: Array<string>;
 
   query: string;
 
   limit?: number;
 
-  mode?: 'fts' | 'fuzzy';
+  mode?: 'fts' | 'fuzzy' | 'auto';
 }
 
 export interface SearchRepositoriesParams extends OffsetPageParams {
