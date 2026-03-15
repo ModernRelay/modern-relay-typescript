@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 (2026-03-15)
+
+Full Changelog: [v0.2.0...v0.2.1](https://github.com/ModernRelay/modern-relay-typescript/compare/v0.2.0...v0.2.1)
+
+### Chores
+
+* update SDK settings ([0afd368](https://github.com/ModernRelay/modern-relay-typescript/commit/0afd3685ecba0b8815b24c6948a78e4a1cad3aed))
+
 ## 0.2.0 (2026-03-15)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/ModernRelay/modern-relay-typescript/compare/v0.1.0...v0.2.0)
