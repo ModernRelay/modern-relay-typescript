@@ -4,16 +4,31 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
-### Direct invocation
+### Building
 
-You can run the MCP Server directly via `npx`:
+Because it's not published yet, clone the repo and build it:
 
 ```sh
-export MODERN_RELAY_API_KEY="My API Key"
-npx -y modern-relay-mcp@latest
+git clone git@github.com:stainless-sdks/modern-relay-typescript.git
+cd modern-relay-typescript
+./scripts/bootstrap
+./scripts/build
 ```
 
+### Running
+
+```sh
+# set env vars as needed
+export MODERN_RELAY_API_KEY="My API Key"
+node ./packages/mcp-server/dist/index.js
+```
+
+> [!NOTE]
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npx -y modern-relay-mcp`
+
 ### Via MCP Client
+
+[Build the project](#building) as mentioned above.
 
 There is a partial list of existing clients at [modelcontextprotocol.io](https://modelcontextprotocol.io/clients). If you already
 have a client, consult their documentation to install the MCP server.
@@ -24,37 +39,14 @@ For clients with a configuration JSON, it might look something like this:
 {
   "mcpServers": {
     "modern_relay_api": {
-      "command": "npx",
-      "args": ["-y", "modern-relay-mcp"],
+      "command": "node",
+      "args": ["/path/to/local/modern-relay-typescript/packages/mcp-server"],
       "env": {
         "MODERN_RELAY_API_KEY": "My API Key"
       }
     }
   }
 }
-```
-
-### Cursor
-
-If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
-in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=modern-relay-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1vZGVybi1yZWxheS1tY3AiXSwiZW52Ijp7Ik1PREVSTl9SRUxBWV9BUElfS0VZIjoiTXkgQVBJIEtleSJ9fQ)
-
-### VS Code
-
-If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
-in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
-
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22modern-relay-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22modern-relay-mcp%22%5D%2C%22env%22%3A%7B%22MODERN_RELAY_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)
-
-### Claude Code
-
-If you use Claude Code, you can install the MCP server by running the command below in your terminal. You will need to set your
-environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
-
-```
-claude mcp add modern_relay_mcp_api --env MODERN_RELAY_API_KEY="My API Key" -- npx -y modern-relay-mcp
 ```
 
 ## Code Mode

@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ModernRelay/modern-relay-typescript.git"
+    "url": "git+https://github.com/stainless-sdks/modern-relay-typescript.git"
   },
-  "homepage": "https://github.com/ModernRelay/modern-relay-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/stainless-sdks/modern-relay-typescript/tree/main/packages/mcp-server#readme",
   "documentation": "https://docs.modernrelay.com",
   "server": {
     "type": "node",
