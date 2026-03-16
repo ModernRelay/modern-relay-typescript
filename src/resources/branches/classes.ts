@@ -12,6 +12,20 @@ import { path } from '../../internal/utils/path';
 export class Classes extends APIResource {
   /**
    * Creates a new class in the schema.
+   *
+   * @example
+   * ```ts
+   * const _class = await client.branches.classes.create(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     classInfo: {
+   *       apiName: 'apiName',
+   *       pluralName: 'x',
+   *       singularName: 'x',
+   *     },
+   *   },
+   * );
+   * ```
    */
   create(branchID: string, body: ClassCreateParams, options?: RequestOptions): APIPromise<string> {
     return this._client.post(path`/v1/branches/${branchID}/classes`, { body, ...options });
@@ -19,6 +33,17 @@ export class Classes extends APIResource {
 
   /**
    * Updates the specified class by setting the values of the parameters passed.
+   *
+   * @example
+   * ```ts
+   * await client.branches.classes.update(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *   {
+   *     branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *     updates: {},
+   *   },
+   * );
+   * ```
    */
   update(classID: string, params: ClassUpdateParams, options?: RequestOptions): APIPromise<void> {
     const { branchId, ...body } = params;
@@ -31,6 +56,14 @@ export class Classes extends APIResource {
 
   /**
    * Permanently deletes a class and all its associated properties from the schema.
+   *
+   * @example
+   * ```ts
+   * const _class = await client.branches.classes.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   delete(
     classID: string,
@@ -44,6 +77,22 @@ export class Classes extends APIResource {
   /**
    * Creates multiple classes in a single request. Returns an array of created class
    * IDs.
+   *
+   * @example
+   * ```ts
+   * const response = await client.branches.classes.createBatch(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     classes: [
+   *       {
+   *         apiName: 'apiName',
+   *         pluralName: 'x',
+   *         singularName: 'x',
+   *       },
+   *     ],
+   *   },
+   * );
+   * ```
    */
   createBatch(
     branchID: string,

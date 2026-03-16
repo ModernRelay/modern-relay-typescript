@@ -12,6 +12,15 @@ import { path } from '../internal/utils/path';
 export class Repositories extends APIResource {
   /**
    * Creates a new repository. Returns the created repository object.
+   *
+   * @example
+   * ```ts
+   * const repository = await client.repositories.create({
+   *   accountId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   name: 'name',
+   *   slug: 'slug',
+   * });
+   * ```
    */
   create(body: RepositoryCreateParams, options?: RequestOptions): APIPromise<RepositoryCreateResponse> {
     return this._client.post('/v1/repositories', { body, ...options });
@@ -19,6 +28,13 @@ export class Repositories extends APIResource {
 
   /**
    * Retrieves the details of an existing repository.
+   *
+   * @example
+   * ```ts
+   * const repository = await client.repositories.retrieve(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   retrieve(repositoryID: string, options?: RequestOptions): APIPromise<Repository> {
     return this._client.get(path`/v1/repositories/${repositoryID}`, options);
@@ -26,6 +42,13 @@ export class Repositories extends APIResource {
 
   /**
    * Updates the specified repository by setting the values of the parameters passed.
+   *
+   * @example
+   * ```ts
+   * const repository = await client.repositories.update(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   update(
     repositoryID: string,
@@ -37,6 +60,16 @@ export class Repositories extends APIResource {
 
   /**
    * Returns a list of repositories for the specified account.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const repositoryListResponse of client.repositories.list(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     accountID: string,
@@ -52,6 +85,13 @@ export class Repositories extends APIResource {
 
   /**
    * Permanently deletes a repository. This action cannot be undone.
+   *
+   * @example
+   * ```ts
+   * const repository = await client.repositories.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   delete(repositoryID: string, options?: RequestOptions): APIPromise<RepositoryDeleteResponse> {
     return this._client.delete(path`/v1/repositories/${repositoryID}`, options);

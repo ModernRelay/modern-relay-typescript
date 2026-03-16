@@ -1,4 +1,4 @@
 configured_endpoints: 40
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/modern-relay%2Fmodern-relay-d8ea18267e0011a3aca58fb945c38935433baa1408f08617c90debb4665e3574.yml
-openapi_spec_hash: 1ccf297dc7973ff9d5eac463d5bc6adf
-config_hash: 5e2c3d143b8a8a7af32ea2ab20ef748f
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/modern-relay%2Fmodern-relay-98b9fbf87411d12b2beab276beee4854751ae61294db04b2e20b046ae24271f2.yml
+openapi_spec_hash: a11b5164941366f156eda6cc6fb8b512
+config_hash: c74927e060f2eb1b0c8a1bf685ff436d
