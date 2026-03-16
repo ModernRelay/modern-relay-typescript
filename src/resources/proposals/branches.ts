@@ -12,6 +12,14 @@ import { path } from '../../internal/utils/path';
 export class Branches extends APIResource {
   /**
    * Links an existing branch to a proposal. One branch per repository per proposal.
+   *
+   * @example
+   * ```ts
+   * await client.proposals.branches.link(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   link(proposalID: string, body: BranchLinkParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/v1/proposals/${proposalID}/branches`, {
@@ -24,6 +32,14 @@ export class Branches extends APIResource {
   /**
    * Removes a branch from a proposal without deleting the branch. Cannot remove the
    * last branch.
+   *
+   * @example
+   * ```ts
+   * await client.proposals.branches.unlink(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { proposalId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   unlink(branchID: string, params: BranchUnlinkParams, options?: RequestOptions): APIPromise<void> {
     const { proposalId } = params;

@@ -12,6 +12,16 @@ export class MergeEvents extends APIResource {
   /**
    * Returns a paginated list of merge events for the specified proposal, showing the
    * audit trail of accepted changes.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const mergeEventListResponse of client.proposals.mergeEvents.list(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     proposalID: string,

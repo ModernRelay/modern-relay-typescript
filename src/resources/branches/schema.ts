@@ -14,6 +14,13 @@ export class Schema extends APIResource {
    * class definitions, property definitions, and bidirectional UUID lookup maps. Use
    * `classIds` (apiName → UUID) and `propertyIds` ('ClassName.propApiName' → UUID)
    * to resolve human-readable names to UUIDs for queries.
+   *
+   * @example
+   * ```ts
+   * const schema = await client.branches.schema.retrieve(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   * );
+   * ```
    */
   retrieve(branchID: string, options?: RequestOptions): APIPromise<SchemaRetrieveResponse> {
     return this._client.get(path`/v1/branches/${branchID}/schema`, options);

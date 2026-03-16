@@ -12,6 +12,21 @@ import { path } from '../../internal/utils/path';
 export class Properties extends APIResource {
   /**
    * Creates a new property definition for one or more classes.
+   *
+   * @example
+   * ```ts
+   * const property = await client.branches.properties.create(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     property: {
+   *       apiName: 'apiName',
+   *       domain: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+   *       name: 'x',
+   *       range: 'string',
+   *     },
+   *   },
+   * );
+   * ```
    */
   create(branchID: string, body: PropertyCreateParams, options?: RequestOptions): APIPromise<string> {
     return this._client.post(path`/v1/branches/${branchID}/properties`, { body, ...options });
@@ -19,6 +34,17 @@ export class Properties extends APIResource {
 
   /**
    * Updates the specified property by setting the values of the parameters passed.
+   *
+   * @example
+   * ```ts
+   * await client.branches.properties.update(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *   {
+   *     branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *     updates: {},
+   *   },
+   * );
+   * ```
    */
   update(propertyID: string, params: PropertyUpdateParams, options?: RequestOptions): APIPromise<void> {
     const { branchId, ...body } = params;
@@ -31,6 +57,14 @@ export class Properties extends APIResource {
 
   /**
    * Permanently deletes a property definition from the schema.
+   *
+   * @example
+   * ```ts
+   * const property = await client.branches.properties.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   delete(
     propertyID: string,
@@ -44,6 +78,24 @@ export class Properties extends APIResource {
   /**
    * Creates multiple property definitions in a single request. Returns an array of
    * created property IDs.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.branches.properties.createBatch(
+   *     '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *     {
+   *       properties: [
+   *         {
+   *           apiName: 'apiName',
+   *           domain: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+   *           name: 'x',
+   *           range: 'string',
+   *         },
+   *       ],
+   *     },
+   *   );
+   * ```
    */
   createBatch(
     branchID: string,

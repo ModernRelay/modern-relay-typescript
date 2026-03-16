@@ -25,10 +25,9 @@ For example:
 
 \`\`\`
 async function run(client) {
-  const page = await client.repositories.list('acct_abc123');
-  const repositoryListResponse = page.data[0]
+  const response = await client.search.entities({ branchIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], query: 'example' });
 
-  console.log(repositoryListResponse.id);
+  console.log(response.data);
 }
 \`\`\`
 

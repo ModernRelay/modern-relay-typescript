@@ -64,6 +64,14 @@ export class Branches extends APIResource {
 
   /**
    * Creates a new branch from the repository's main data.
+   *
+   * @example
+   * ```ts
+   * const branch = await client.branches.create(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { name: 'x' },
+   * );
+   * ```
    */
   create(repositoryID: string, body: BranchCreateParams, options?: RequestOptions): APIPromise<Branch> {
     return this._client.post(path`/v1/repositories/${repositoryID}/branches`, { body, ...options });
@@ -71,6 +79,13 @@ export class Branches extends APIResource {
 
   /**
    * Retrieves the details of an existing branch.
+   *
+   * @example
+   * ```ts
+   * const branch = await client.branches.retrieve(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   retrieve(branchID: string, options?: RequestOptions): APIPromise<Branch> {
     return this._client.get(path`/v1/branches/${branchID}`, options);
@@ -78,6 +93,16 @@ export class Branches extends APIResource {
 
   /**
    * Returns a paginated list of all branches for the specified repository.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const branch of client.branches.list(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     repositoryID: string,
@@ -93,6 +118,13 @@ export class Branches extends APIResource {
   /**
    * Permanently deletes a branch and all its associated facts. Cannot delete
    * branches with children or the main branch.
+   *
+   * @example
+   * ```ts
+   * const branch = await client.branches.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   delete(branchID: string, options?: RequestOptions): APIPromise<BranchDeleteResponse> {
     return this._client.delete(path`/v1/branches/${branchID}`, options);
@@ -101,6 +133,13 @@ export class Branches extends APIResource {
   /**
    * Returns the set of entity changes on this branch compared to its parent. Shows
    * added and removed property values per entity.
+   *
+   * @example
+   * ```ts
+   * const response = await client.branches.diff(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   * );
+   * ```
    */
   diff(
     branchID: string,
@@ -112,6 +151,16 @@ export class Branches extends APIResource {
 
   /**
    * Returns a list of branches that are direct children of the specified branch.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const branch of client.branches.listChildren(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   listChildren(
     branchID: string,
@@ -128,6 +177,16 @@ export class Branches extends APIResource {
    * Merges all changes from the source branch into the target branch. The source
    * branch ID comes from the URL path; the target branch ID must be provided in the
    * request body.
+   *
+   * @example
+   * ```ts
+   * await client.branches.merge(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     targetBranchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   },
+   * );
+   * ```
    */
   merge(sourceBranchID: string, body: BranchMergeParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/v1/branches/${sourceBranchID}/merge`, {
