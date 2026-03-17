@@ -26,6 +26,13 @@ export class Proposals extends APIResource {
   /**
    * Creates a new proposal from existing branches. Accepts an array of branch IDs
    * (one per repository). Returns the proposal ID.
+   *
+   * @example
+   * ```ts
+   * const proposal = await client.proposals.create({
+   *   branchIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+   * });
+   * ```
    */
   create(body: ProposalCreateParams, options?: RequestOptions): APIPromise<ProposalCreateResponse> {
     return this._client.post('/v1/proposals', { body, ...options });
@@ -34,6 +41,13 @@ export class Proposals extends APIResource {
   /**
    * Retrieves the details of a proposal, including its associated branches and
    * review status.
+   *
+   * @example
+   * ```ts
+   * const proposal = await client.proposals.retrieve(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   retrieve(proposalID: string, options?: RequestOptions): APIPromise<Proposal> {
     return this._client.get(path`/v1/proposals/${proposalID}`, options);
@@ -42,6 +56,14 @@ export class Proposals extends APIResource {
   /**
    * Updates the proposal title, description, or status. Use status transitions to
    * move through the review workflow: draft → open → needs_review → closed.
+   *
+   * @example
+   * ```ts
+   * const proposal = await client.proposals.update(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { repositoryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   update(
     proposalID: string,
@@ -54,6 +76,16 @@ export class Proposals extends APIResource {
   /**
    * Returns a paginated list of proposals for the specified repository. Filter by
    * status to find proposals needing review.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const proposalListResponse of client.proposals.list(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     repositoryID: string,
@@ -70,6 +102,13 @@ export class Proposals extends APIResource {
   /**
    * Permanently deletes a draft proposal. Only proposals in draft status can be
    * deleted.
+   *
+   * @example
+   * ```ts
+   * await client.proposals.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   delete(proposalID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/proposals/${proposalID}`, {
@@ -81,6 +120,14 @@ export class Proposals extends APIResource {
   /**
    * Merges the proposal's branch changes into the parent branch. Creates a merge
    * event for audit. The proposal remains open for further contributions.
+   *
+   * @example
+   * ```ts
+   * const response = await client.proposals.accept(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * );
+   * ```
    */
   accept(
     proposalID: string,

@@ -12,6 +12,17 @@ import { path } from '../../internal/utils/path';
 export class Entities extends APIResource {
   /**
    * Creates one or more entity instances of a specified class.
+   *
+   * @example
+   * ```ts
+   * const entities = await client.branches.entities.create(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *   {
+   *     classId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *     entities: [{ foo: 'string' }],
+   *   },
+   * );
+   * ```
    */
   create(
     branchID: string,
@@ -23,6 +34,14 @@ export class Entities extends APIResource {
 
   /**
    * Returns one or more entities by their IDs, including all property values.
+   *
+   * @example
+   * ```ts
+   * const entities = await client.branches.entities.retrieve(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { entityIds: ['x'] },
+   * );
+   * ```
    */
   retrieve(
     branchID: string,
@@ -34,6 +53,17 @@ export class Entities extends APIResource {
 
   /**
    * Updates an entity by setting the values of the properties passed.
+   *
+   * @example
+   * ```ts
+   * const entity = await client.branches.entities.update(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     branchId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *     data: { foo: 'string' },
+   *   },
+   * );
+   * ```
    */
   update(
     entityID: string,
@@ -47,6 +77,17 @@ export class Entities extends APIResource {
   /**
    * Returns a paginated list of entities for a given class, ordered by creation
    * date. For filtering, search, and ranking, use POST /entities/query.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const entityListResponse of client.branches.entities.list(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { classId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     branchID: string,
@@ -61,6 +102,14 @@ export class Entities extends APIResource {
 
   /**
    * Deletes one or more entities by their IDs.
+   *
+   * @example
+   * ```ts
+   * const entity = await client.branches.entities.delete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   { entityIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
+   * );
+   * ```
    */
   delete(
     branchID: string,
@@ -72,6 +121,17 @@ export class Entities extends APIResource {
 
   /**
    * Returns entities that reference the specified entity via reference properties.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const entityListBackreferencesResponse of client.branches.entities.listBackreferences(
+   *   'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+   *   { branchId: 'ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   listBackreferences(
     entityID: string,
@@ -90,6 +150,13 @@ export class Entities extends APIResource {
    * Query entities with filters, full-text search, vector search, ranking, and
    * relationship expansion. Supports the full query DSL. Call GET /schema first to
    * discover class and property UUIDs.
+   *
+   * @example
+   * ```ts
+   * const response = await client.branches.entities.query(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
    */
   query(
     branchID: string,
@@ -101,6 +168,17 @@ export class Entities extends APIResource {
 
   /**
    * Applies the same property values to multiple entities at once.
+   *
+   * @example
+   * ```ts
+   * const response = await client.branches.entities.updateBatch(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   {
+   *     entityIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+   *     properties: { foo: 'string' },
+   *   },
+   * );
+   * ```
    */
   updateBatch(
     branchID: string,

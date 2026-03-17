@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 (2026-03-17)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/modernrelay/modern-relay-typescript/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** replace accountId with branchIds, add auto mode to search entities ([80d5549](https://github.com/modernrelay/modern-relay-typescript/commit/80d55491ae9f037a4368ee5ccdf543c74f6f671a))
+* Fix OpenAPI spec: add UUID examples and clean up query params ([fd00a75](https://github.com/modernrelay/modern-relay-typescript/commit/fd00a750d6cfa9142ad493d570a0a079b80eff91))
+
+
+### Chores
+
+* **internal:** support x-stainless-mcp-client-permissions headers in MCP servers ([2a19bb9](https://github.com/modernrelay/modern-relay-typescript/commit/2a19bb91ef31ab7df8f00bb02a2bfca2e469581e))
+* **internal:** tweak CI branches ([cbcfd0c](https://github.com/modernrelay/modern-relay-typescript/commit/cbcfd0c57793df28f384a0c9b32ae2709b41009b))
+* update SDK settings ([0afd368](https://github.com/modernrelay/modern-relay-typescript/commit/0afd3685ecba0b8815b24c6948a78e4a1cad3aed))
+
 ## 0.2.0 (2026-03-15)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/ModernRelay/modern-relay-typescript/compare/v0.1.0...v0.2.0)

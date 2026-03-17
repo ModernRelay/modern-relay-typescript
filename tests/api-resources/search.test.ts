@@ -10,7 +10,7 @@ const client = new ModernRelay({
 describe('resource search', () => {
   test('entities: only required params', async () => {
     const responsePromise = client.search.entities({
-      accountId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      branchIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       query: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -24,7 +24,7 @@ describe('resource search', () => {
 
   test('entities: required and optional params', async () => {
     const response = await client.search.entities({
-      accountId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      branchIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       query: 'x',
       limit: 1,
       mode: 'fts',
