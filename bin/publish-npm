@@ -2,8 +2,8 @@
 
 set -eux
 
+# Auth is handled via OIDC trusted publishers (no token needed)
 # Registry is configured by actions/setup-node with registry-url
-# Auth is handled via NODE_AUTH_TOKEN environment variable
 
 yarn build
 cd dist
