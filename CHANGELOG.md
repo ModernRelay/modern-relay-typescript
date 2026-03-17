@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.3 (2026-03-17)
+
+Full Changelog: [v0.3.2...v0.3.3](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.2...v0.3.3)
+
+### Bug Fixes
+
+* use npm publish instead of yarn publish for CI compatibility ([478931c](https://github.com/modernrelay/modern-relay-typescript/commit/478931ce1734c3614c0bfdb38f16f9da11ac5e8c))
+
 ## 0.3.2 (2026-03-17)
 
 Full Changelog: [v0.3.1...v0.3.2](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.1...v0.3.2)
