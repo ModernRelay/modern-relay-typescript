@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.4 (2026-03-17)
+
+Full Changelog: [v0.3.3...v0.3.4](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.3...v0.3.4)
+
+### Bug Fixes
+
+* explicitly set npm registry to avoid yarn registry override ([71cda22](https://github.com/modernrelay/modern-relay-typescript/commit/71cda222247c3015bcb768860e4a1f4c20a165dc))
+* pass --registry flag to npm publish to override yarn registry ([f6e2f22](https://github.com/modernrelay/modern-relay-typescript/commit/f6e2f224a49c1d2ad6451ca889a61b2494b98701))
+* use npm trusted publishers (OIDC) for CI publishing ([1161d72](https://github.com/modernrelay/modern-relay-typescript/commit/1161d72ec15527533aa11e0a209bed17aa6e469d))
+
 ## 0.3.3 (2026-03-17)
 
 Full Changelog: [v0.3.2...v0.3.3](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.2...v0.3.3)

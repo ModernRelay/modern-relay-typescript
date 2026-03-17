@@ -1,6 +1,6 @@
 {
   "name": "modern-relay",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "The official TypeScript library for the Modern Relay API",
   "author": "Modern Relay <support@modernrelay.com>",
   "types": "dist/index.d.ts",
