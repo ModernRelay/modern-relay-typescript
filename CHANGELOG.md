@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.5 (2026-03-17)
+
+Full Changelog: [v0.3.4...v0.3.5](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.4...v0.3.5)
+
+### Bug Fixes
+
+* remove NPM_TOKEN, rely on OIDC trusted publishers for auth ([1bd656b](https://github.com/modernrelay/modern-relay-typescript/commit/1bd656bbec76a4440b447dc11722a09af47ed205))
+
 ## 0.3.4 (2026-03-17)
 
 Full Changelog: [v0.3.3...v0.3.4](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.3...v0.3.4)
