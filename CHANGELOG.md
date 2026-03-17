@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.6 (2026-03-17)
+
+Full Changelog: [v0.3.5...v0.3.6](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.5...v0.3.6)
+
+### Bug Fixes
+
+* use correct case for GitHub org in repository URLs ([edd37a5](https://github.com/modernrelay/modern-relay-typescript/commit/edd37a56f4b5b0da1dafc34bc2fe0ba1553c898d))
+* use Node 22 with latest npm for trusted publisher OIDC support ([df9f572](https://github.com/modernrelay/modern-relay-typescript/commit/df9f5728433972759289c974725020f0fc93ed8d))
+* use Node 24 for trusted publisher OIDC support ([5f88e17](https://github.com/modernrelay/modern-relay-typescript/commit/5f88e17644ce8b7e041b747a19675a3b72ffaf61))
+
 ## 0.3.5 (2026-03-17)
 
 Full Changelog: [v0.3.4...v0.3.5](https://github.com/modernrelay/modern-relay-typescript/compare/v0.3.4...v0.3.5)

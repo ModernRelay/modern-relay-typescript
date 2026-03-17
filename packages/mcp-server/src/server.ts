@@ -20,7 +20,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'modern_relay_api',
-      version: '0.3.5',
+      version: '0.3.6',
     },
     {
       instructions: await getInstructions(stainlessApiKey),
