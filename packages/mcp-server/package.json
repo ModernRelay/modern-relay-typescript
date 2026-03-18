@@ -1,6 +1,6 @@
 {
   "name": "modern-relay-mcp",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "The official MCP Server for the Modern Relay API",
   "author": "Modern Relay <support@modernrelay.com>",
   "types": "dist/index.d.ts",
